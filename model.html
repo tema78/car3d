@@ -1,1 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Model Page</title>
 
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+<style>
+body {
+  margin:0;
+  font-family:Arial;
+  background:#0a0a0a;
+  color:white;
+  text-align:center;
+}
+
+.container {
+  padding:30px;
+}
+
+model-viewer {
+  width:80%;
+  height:500px;
+  margin:auto;
+  background:#111;
+  border-radius:15px;
+}
+
+button {
+  padding:12px 20px;
+  margin:10px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+.buy {
+  background:#4f8cff;
+  color:white;
+}
+
+.back {
+  background:#111;
+  color:white;
+  border:1px solid #333;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1 id="name"></h1>
+
+<model-viewer id="viewer" auto-rotate camera-controls></model-viewer>
+
+<p id="price"></p>
+
+<button class="buy" onclick="buy()">Buy</button>
+<button class="back" onclick="back()">Back</button>
+
+</div>
+
+<script src="data.js"></script>
+
+<script>
+
+const id = new URLSearchParams(window.location.search).get("id");
+const model = models.find(m => m.id === id);
+
+if(model){
+  document.getElementById("name").innerText = model.name;
+  document.getElementById("viewer").src = model.file;
+  document.getElementById("price").innerText = "$" + model.price;
+}
+
+function buy(){
+  window.open("https://t.me/temanovikau", "_blank");
+}
+
+function back(){
+  window.location.href = "index.html";
+}
+
+</script>
+
+</body>
+</html>
