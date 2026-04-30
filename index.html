@@ -2,17 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>car3d Premium</title>
+<title>car3d Showroom</title>
 
 <style>
 body {
   margin:0;
   font-family:Arial;
-  background:black;
+  background:#000;
+  color:white;
   overflow:hidden;
 }
 
-/* 🌌 BACKGROUND */
+/* INTRO */
 #intro {
   position:fixed;
   width:100%;
@@ -21,142 +22,92 @@ body {
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  background: radial-gradient(circle at center, #1a1a1a, #000);
+  background: radial-gradient(circle, #1a1a1a, #000);
+  transition:1s;
 }
 
-/* moving light effect */
-#intro::before {
-  content:"";
-  position:absolute;
-  width:200%;
-  height:200%;
-  background: radial-gradient(circle, rgba(255,208,0,0.08), transparent 60%);
-  animation:move 6s infinite linear;
-}
-
-@keyframes move {
-  0% {transform:translate(-20%,-20%)}
-  50% {transform:translate(20%,20%)}
-  100% {transform:translate(-20%,-20%)}
-}
-
-/* LOGO */
 h1 {
   color:#ffd000;
   font-size:50px;
-  z-index:2;
-  animation:fade 2s ease;
 }
 
-@keyframes fade {
-  from{opacity:0; transform:translateY(-20px);}
-  to{opacity:1; transform:translateY(0);}
-}
-
-/* 🚗 BUTTON */
 button {
-  margin-top:30px;
+  margin-top:20px;
   padding:15px 30px;
   border:none;
-  border-radius:15px;
+  border-radius:12px;
   background:#ffd000;
-  color:black;
-  font-weight:bold;
   cursor:pointer;
-  z-index:2;
-  transition:0.3s;
-  position:relative;
-  overflow:hidden;
+  font-weight:bold;
 }
 
-/* glowing effect */
-button::before {
-  content:"";
-  position:absolute;
-  top:-50%;
-  left:-50%;
-  width:200%;
-  height:200%;
-  background:linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
-  transform:rotate(45deg);
-  animation:shine 2.5s infinite;
-}
-
-@keyframes shine {
-  0% {transform:translateX(-100%) rotate(45deg);}
-  100% {transform:translateX(100%) rotate(45deg);}
-}
-
-/* 🚗 CAR ANIMATION */
-.car {
-  position:absolute;
-  bottom:10%;
-  width:200px;
-  animation:drive 2s ease-in-out infinite;
-  z-index:1;
-}
-
-@keyframes drive {
-  0% {transform:translateX(-300px);}
-  100% {transform:translateX(300px);}
-}
-
-/* 🚪 STORE */
+/* 🚗 STORE */
 #store {
   display:none;
   background:#0a0a0a;
   min-height:100vh;
-  color:white;
   padding:20px;
+  overflow:auto;
 }
 
-.fadeIn {
-  animation:fadeIn 1.5s ease;
+header {
+  text-align:center;
+  color:#ffd000;
+  margin-bottom:20px;
 }
 
-@keyframes fadeIn {
-  from{opacity:0;}
-  to{opacity:1;}
-}
-
+/* GRID */
 .grid {
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
   gap:15px;
 }
 
+/* CARD */
 .card {
   background:#111;
   border-radius:15px;
-  padding:10px;
-  border:1px solid #222;
+  overflow:hidden;
+  cursor:pointer;
   transition:0.3s;
+  border:1px solid #222;
 }
 
 .card:hover {
-  transform:scale(1.03);
+  transform:scale(1.05);
   border-color:#ffd000;
+}
+
+.card img {
+  width:100%;
+  height:160px;
+  object-fit:cover;
+}
+
+.info {
+  padding:10px;
+}
+
+.price {
+  color:#ffd000;
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🚗 INTRO -->
+<!-- INTRO -->
 <div id="intro">
-
-  <h1>🚗 car3d PREMIUM</h1>
-
-  <img class="car" src="https://cdn-icons-png.flaticon.com/512/2555/2555023.png">
-
+  <h1>🚗 car3d SHOWROOM</h1>
   <button onclick="enter()">ENTER SHOWROOM</button>
-
 </div>
 
-<!-- 🏁 STORE -->
+<!-- STORE -->
 <div id="store">
 
-<h1 style="color:#ffd000">Luxury Car Catalog</h1>
+<header>
+  <h1>Premium Car Catalog</h1>
+</header>
 
 <div class="grid" id="grid"></div>
 
@@ -169,10 +120,9 @@ button::before {
 function enter(){
   document.getElementById("intro").style.display="none";
   document.getElementById("store").style.display="block";
-  document.getElementById("store").classList.add("fadeIn");
 }
 
-/* render cars */
+/* RENDER CARS */
 const grid=document.getElementById("grid");
 
 cars.forEach(c=>{
@@ -180,8 +130,11 @@ cars.forEach(c=>{
   div.className="card";
 
   div.innerHTML=`
-    <h3>${c.name}</h3>
-    <p style="color:#ffd000">$${c.price}</p>
+    <img src="${c.image}">
+    <div class="info">
+      <h3>${c.name}</h3>
+      <p class="price">$${c.price}</p>
+    </div>
   `;
 
   div.onclick=()=>{
