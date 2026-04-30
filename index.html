@@ -2,96 +2,193 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Mini 3D Marketplace</title>
-
-<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+<title>car3d Premium</title>
 
 <style>
 body {
   margin:0;
   font-family:Arial;
-  background:#0a0a0a;
-  color:white;
+  background:black;
+  overflow:hidden;
 }
 
-header {
-  text-align:center;
-  padding:20px;
-  border-bottom:1px solid #222;
+/* 🌌 BACKGROUND */
+#intro {
+  position:fixed;
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  background: radial-gradient(circle at center, #1a1a1a, #000);
 }
 
+/* moving light effect */
+#intro::before {
+  content:"";
+  position:absolute;
+  width:200%;
+  height:200%;
+  background: radial-gradient(circle, rgba(255,208,0,0.08), transparent 60%);
+  animation:move 6s infinite linear;
+}
+
+@keyframes move {
+  0% {transform:translate(-20%,-20%)}
+  50% {transform:translate(20%,20%)}
+  100% {transform:translate(-20%,-20%)}
+}
+
+/* LOGO */
 h1 {
-  color:#4f8cff;
+  color:#ffd000;
+  font-size:50px;
+  z-index:2;
+  animation:fade 2s ease;
+}
+
+@keyframes fade {
+  from{opacity:0; transform:translateY(-20px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+/* 🚗 BUTTON */
+button {
+  margin-top:30px;
+  padding:15px 30px;
+  border:none;
+  border-radius:15px;
+  background:#ffd000;
+  color:black;
+  font-weight:bold;
+  cursor:pointer;
+  z-index:2;
+  transition:0.3s;
+  position:relative;
+  overflow:hidden;
+}
+
+/* glowing effect */
+button::before {
+  content:"";
+  position:absolute;
+  top:-50%;
+  left:-50%;
+  width:200%;
+  height:200%;
+  background:linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+  transform:rotate(45deg);
+  animation:shine 2.5s infinite;
+}
+
+@keyframes shine {
+  0% {transform:translateX(-100%) rotate(45deg);}
+  100% {transform:translateX(100%) rotate(45deg);}
+}
+
+/* 🚗 CAR ANIMATION */
+.car {
+  position:absolute;
+  bottom:10%;
+  width:200px;
+  animation:drive 2s ease-in-out infinite;
+  z-index:1;
+}
+
+@keyframes drive {
+  0% {transform:translateX(-300px);}
+  100% {transform:translateX(300px);}
+}
+
+/* 🚪 STORE */
+#store {
+  display:none;
+  background:#0a0a0a;
+  min-height:100vh;
+  color:white;
+  padding:20px;
+}
+
+.fadeIn {
+  animation:fadeIn 1.5s ease;
+}
+
+@keyframes fadeIn {
+  from{opacity:0;}
+  to{opacity:1;}
 }
 
 .grid {
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
   gap:15px;
-  padding:20px;
 }
 
-/* CARD */
 .card {
   background:#111;
   border-radius:15px;
   padding:10px;
-  cursor:pointer;
-  transition:0.3s;
   border:1px solid #222;
+  transition:0.3s;
 }
 
 .card:hover {
   transform:scale(1.03);
-  border-color:#4f8cff;
-}
-
-/* 3D preview */
-model-viewer {
-  width:100%;
-  height:200px;
-  background:#000;
-  border-radius:10px;
-}
-
-.price {
-  color:#4f8cff;
+  border-color:#ffd000;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-<h1>🧊 3D Marketplace (Mini CGTrader)</h1>
-</header>
+<!-- 🚗 INTRO -->
+<div id="intro">
+
+  <h1>🚗 car3d PREMIUM</h1>
+
+  <img class="car" src="https://cdn-icons-png.flaticon.com/512/2555/2555023.png">
+
+  <button onclick="enter()">ENTER SHOWROOM</button>
+
+</div>
+
+<!-- 🏁 STORE -->
+<div id="store">
+
+<h1 style="color:#ffd000">Luxury Car Catalog</h1>
 
 <div class="grid" id="grid"></div>
+
+</div>
 
 <script src="data.js"></script>
 
 <script>
 
-const grid = document.getElementById("grid");
+function enter(){
+  document.getElementById("intro").style.display="none";
+  document.getElementById("store").style.display="block";
+  document.getElementById("store").classList.add("fadeIn");
+}
 
-models.forEach(m => {
+/* render cars */
+const grid=document.getElementById("grid");
 
-  let div = document.createElement("div");
-  div.className = "card";
+cars.forEach(c=>{
+  let div=document.createElement("div");
+  div.className="card";
 
-  div.innerHTML = `
-    <model-viewer src="${m.file}" auto-rotate camera-controls></model-viewer>
-    <h3>${m.name}</h3>
-    <p class="price">$${m.price}</p>
-    <p>Seller: ${m.seller}</p>
+  div.innerHTML=`
+    <h3>${c.name}</h3>
+    <p style="color:#ffd000">$${c.price}</p>
   `;
 
-  div.onclick = () => {
-    window.location.href = "model.html?id=" + m.id;
+  div.onclick=()=>{
+    window.location.href="car.html?id="+c.id;
   };
 
   grid.appendChild(div);
-
 });
 
 </script>
